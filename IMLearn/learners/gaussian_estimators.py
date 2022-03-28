@@ -17,7 +17,7 @@ class UnivariateGaussian:
 
         Parameters
         ----------
-        biased_var : bool, default=True
+        biased_var : bool, default=False
             Should fitted estimator of variance be a biased or unbiased estimator
 
         Attributes
@@ -131,12 +131,12 @@ class MultivariateGaussian:
             Initialized as false indicating current estimator instance has not been fitted.
             To be set as True in `MultivariateGaussian.fit` function.
 
-        mu_: float
-            Estimated expectation initialized as None. To be set in `MultivariateGaussian.ft`
+        mu_: ndarray of shape (n_features,)
+            Estimated expectation initialized as None. To be set in `MultivariateGaussian.fit`
             function.
 
-        cov_: float
-            Estimated covariance initialized as None. To be set in `MultivariateGaussian.ft`
+        cov_: ndarray of shape (n_features, n_features)
+            Estimated covariance initialized as None. To be set in `MultivariateGaussian.fit`
             function.
         """
         self.mu_, self.cov_ = None, None
@@ -148,12 +148,12 @@ class MultivariateGaussian:
 
         Parameters
         ----------
-        X: ndarray of shape (n_samples, )
+        X: ndarray of shape (n_samples, n_features)
             Training data
 
         Returns
         -------
-        self : returns an instance of self.
+        self : returns an instance of self
 
         Notes
         -----
@@ -172,7 +172,7 @@ class MultivariateGaussian:
 
         Parameters
         ----------
-        X: ndarray of shape (n_samples, )
+        X: ndarray of shape (n_samples, n_features)
             Samples to calculate PDF for
 
         Returns
@@ -201,17 +201,17 @@ class MultivariateGaussian:
 
         Parameters
         ----------
-        mu : float
+        mu : ndarray of shape (n_features,)
             Expectation of Gaussian
-        cov : float
+        cov : ndarray of shape (n_features, n_features)
             covariance matrix of Gaussian
-        X : ndarray of shape (n_samples, )
+        X : ndarray of shape (n_samples, n_features)
             Samples to calculate log-likelihood with
 
         Returns
         -------
         log_likelihood: float
-            log-likelihood calculated
+            log-likelihood calculated over all input data and under given parameters of Gaussian
         """
         skalar1 = X.shape[0]*((slogdet(cov)[0] * slogdet(cov)[1]) + X.shape[1] * np.log(2 * np.pi))
         sum = np.multiply(np.transpose(X - mu), np.matmul(inv(cov), np.transpose(X - mu))).sum()
